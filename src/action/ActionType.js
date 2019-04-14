@@ -1,0 +1,23 @@
+// User Auth Actions
+export const USER_LOGIN_START = "USER_LOGIN_START";
+export const USER_LOGIN_SUCCESS = "USER_LOGIN_SUCCESS";
+export const USER_LOGIN_FAIL = "USER_LOGIN_FAIL";
+export const USER_LOGOUT = "USER_LOGOUT";
+
+// User Sign in Actions
+export const SIGNUP_START = "SIGNUP_START";
+export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
+export const SIGNUP_FAIL = "SIGNUP_FAIL";
+// Toster
+export const SERVER_ERROR = "SERVER_ERROR";
+export const MESSAGE_SNACKBAR = "MESSAGE_SNACKBAR";
+export const SNACKBAR_CLOSE = "SNACKBAR_CLOSE";
+//User ForgotPassword Actions
+export const FORGOTPASSWORD_SUCCESS = "FORGOTPASSWORD_SUCCESS";
+export const FORGOTPASSWORD_START = "FORGOTPASSWORD_START";
+export const FORGOTPASSWORD_FAIL = "FORGOTPASSWORD_FAIL";
+// Password Reset Actions
+export const PASSWORD_RESET_SUCCESS = "PASSWORD_RESET_SUCCESS";
+export const PASSWORD_RESET_FAIL = "PASSWORD_RESET_SUCCESS";
+//User Profile Actions
+export const USER_PROFILE_DATA = "USER_PROFILE_DATA";
