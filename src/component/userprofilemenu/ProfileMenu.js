@@ -5,6 +5,7 @@ import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import Button from "@material-ui/core/Button";
 import { logout } from "../../action/authActions.js";
 import { connect } from "react-redux";
 import ProfileDialogModel from "../../container/dialogModel/ProfileDialogModel.js";
@@ -58,6 +59,12 @@ class ProfileMenu extends Component {
     const location = this.props.history;
     this.props.logout(location);
   };
+  handleOnClose = () => {
+    this.setState({
+      // anchorEl: null,
+      open: true
+    });
+  };
 
   render() {
     const { anchorEl } = this.state;
@@ -88,7 +95,13 @@ class ProfileMenu extends Component {
           open={open}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.handleClose} component={ProfileDialogModel} />
+          <MenuItem onClick={this.handleOnClose}>Profile</MenuItem>
+          {this.state.open == true ? (
+            <ProfileDialogModel
+              open={this.state.open}
+              close={this.handleOnCloseModel}
+            />
+          ) : null}
           <MenuItem onClick={this.handleOnClick}>Logout</MenuItem>
         </Menu>
       </div>

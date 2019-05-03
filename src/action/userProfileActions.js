@@ -22,7 +22,7 @@ export const userProfile = () => {
     axios(options)
       .then(response => {
         dispatch({ type: USER_PROFILE_DATA, response: response.data.message });
-        // console.log(response);
+        console.log(response);
       })
       .catch(err => {
         dispatch({ type: SERVER_ERROR, response: err.message });

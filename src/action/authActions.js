@@ -82,6 +82,7 @@ export const forgotpassword = email => {
     axios
       .post("/forgotPassword", { email })
       .then(response => {
+        console.log(response);
         if (response.data.success === true) {
           dispatch({
             type: FORGOTPASSWORD_SUCCESS,

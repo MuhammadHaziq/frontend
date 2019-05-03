@@ -8,15 +8,16 @@ import Input from "../../component/Input.js";
 import Date_Picker from "../../component/dateTimePicker/DatePicker.js";
 import { userProfile } from "../../action/userProfileActions.js";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 class ProfileDialogModel extends Component {
   state = {
-    open: false,
+    // open: true,
     email: "",
     username: "",
     phonenumber: "",
-    dateofbirth: "",
-    selectDate: new Date()
+    dateofbirth: new Date(),
+    // selectDate: new Date()
   };
   componentDidMount() {
     this.props.userProfile();
@@ -32,30 +33,54 @@ class ProfileDialogModel extends Component {
     const { name, value } = e.target;
     this.setState({ ...this.state, [name]: value });
   };
-  handleDateChange = selectDate => {
+  handleDateChange = dateofbirth => {
     this.setState({
-      selectDate: selectDate
+      dateofbirth: dateofbirth
     });
   };
 
+  saveProfileData = e => {
+    e.preventDefault();
+    const data = {
+      username: this.state.username,
+      email: this.state.email,
+      phonenumber: this.state.phonenumber,
+      dateofbirth: this.state.dateofbirth
+    };
+    console.log(data);
+  };
+  componentDidUpdate(prevProps, prevState) {
+    console.log(this.props.userDetail.email);
+    if (prevState.email == null || prevState.email == "") {
+      this.setState({
+        email: this.props.userDetail.email,
+        username: this.props.userDetail.name,
+        phonenumber: this.props.userDetail.phonenumber || ""
+      });
+    }
+  }
+
   render() {
+    if (!this.props.open) {
+      return null;
+    }
     console.log(this.props.userDetail);
+
     return (
       <React.Fragment>
-        <Button onClick={this.handleClickOpen}>Profile</Button>
         <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
+          open={true}
+          onClose={this.props.handleOnCloseModel}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Profile</DialogTitle>
-          <DialogContent>
-            <form>
+          <form onSubmit={this.saveProfileData}>
+            <DialogContent>
               <Input
                 autoFocus
                 name={"email"}
                 type={"text"}
-                value={this.props.userDetail.email}
+                value={this.state.email}
                 handleOnChange={this.handleOnChange}
                 label={"Email"}
               />
@@ -63,6 +88,7 @@ class ProfileDialogModel extends Component {
                 autoFocus
                 name={"username"}
                 type={"text"}
+                value={this.state.username}
                 handleOnChange={this.handleOnChange}
                 label={"UserName"}
               />
@@ -70,29 +96,34 @@ class ProfileDialogModel extends Component {
                 autoFocus
                 name={"phonenumber"}
                 type={"number"}
+                value={this.state.phonenumber}
                 handleOnChange={this.handleOnChange}
                 label={"Phone Number"}
               />
               <Date_Picker
                 label="Date of Birth"
-                selectedDate={this.state.selectDate}
+                selectedDate={this.state.dateofbirth}
                 handleDateChange={this.handleDateChange}
               />
-            </form>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Subscribe
-            </Button>
-          </DialogActions>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.props.handleOnCloseModel} color="primary">
+                Cancel
+              </Button>
+              <Button type="submit" color="primary">
+                Save
+              </Button>
+            </DialogActions>
+          </form>
         </Dialog>
       </React.Fragment>
     );
   }
 }
+ProfileDialogModel.propTypes = {
+  handleOnCloseModel: PropTypes.func.isRequired,
+  open: PropTypes.bool
+};
 const mapStateToProps = state => {
   return {
     userDetail: state.userProfileReducer.userProfile
@@ -102,3 +133,5 @@ export default connect(
   mapStateToProps,
   { userProfile }
 )(ProfileDialogModel);
+
+// <Button onClick={this.handleClickOpen}>Profile</Button>
