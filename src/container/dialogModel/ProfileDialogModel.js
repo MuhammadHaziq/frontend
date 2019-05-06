@@ -12,6 +12,7 @@ import {
 } from "../../action/userProfileActions.js";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import dateformat from "dateformat";
 class ProfileDialogModel extends Component {
   state = {
     // open: true,
@@ -49,7 +50,7 @@ class ProfileDialogModel extends Component {
       username: this.state.username,
       email: this.state.email,
       phonenumber: this.state.phonenumber,
-      dateofbirth: this.state.dateofbirth
+      dateofbirth: dateformat(this.state.dateofbirth, "isoDate", true)
     };
     this.props.SaveUserProfile(data);
     console.log(data);
@@ -76,7 +77,7 @@ class ProfileDialogModel extends Component {
       <React.Fragment>
         <Dialog
           open={true}
-          onClose={this.props.handleOnCloseModel}
+          onClose={this.props.close}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Profile</DialogTitle>
@@ -113,7 +114,7 @@ class ProfileDialogModel extends Component {
               />
             </DialogContent>
             <DialogActions>
-              <Button onClick={this.props.handleOnCloseModel} color="primary">
+              <Button onClick={this.props.close} color="primary">
                 Cancel
               </Button>
               <Button type="submit" color="primary">
