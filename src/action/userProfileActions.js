@@ -30,3 +30,20 @@ export const userProfile = () => {
       });
   };
 };
+
+export const SaveUserProfile = data => {
+  return dispatch => {
+    const options = {
+      url: "/saveprofile",
+      method: "POST",
+      data: data
+    };
+    axios(options)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  };
+};

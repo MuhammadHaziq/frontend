@@ -6,17 +6,20 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Input from "../../component/Input.js";
 import Date_Picker from "../../component/dateTimePicker/DatePicker.js";
-import { userProfile } from "../../action/userProfileActions.js";
+import {
+  userProfile,
+  SaveUserProfile
+} from "../../action/userProfileActions.js";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-
 class ProfileDialogModel extends Component {
   state = {
     // open: true,
     email: "",
     username: "",
     phonenumber: "",
-    dateofbirth: new Date(),
+    user_id: "",
+    dateofbirth: new Date()
     // selectDate: new Date()
   };
   componentDidMount() {
@@ -42,17 +45,20 @@ class ProfileDialogModel extends Component {
   saveProfileData = e => {
     e.preventDefault();
     const data = {
+      user_id: this.state.user_id,
       username: this.state.username,
       email: this.state.email,
       phonenumber: this.state.phonenumber,
       dateofbirth: this.state.dateofbirth
     };
+    this.props.SaveUserProfile(data);
     console.log(data);
   };
   componentDidUpdate(prevProps, prevState) {
     console.log(this.props.userDetail.email);
     if (prevState.email == null || prevState.email == "") {
       this.setState({
+        user_id: this.props.userDetail._id,
         email: this.props.userDetail.email,
         username: this.props.userDetail.name,
         phonenumber: this.props.userDetail.phonenumber || ""
@@ -131,7 +137,7 @@ const mapStateToProps = state => {
 };
 export default connect(
   mapStateToProps,
-  { userProfile }
+  { userProfile, SaveUserProfile }
 )(ProfileDialogModel);
 
 // <Button onClick={this.handleClickOpen}>Profile</Button>
