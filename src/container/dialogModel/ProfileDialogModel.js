@@ -5,27 +5,35 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Input from "../../component/Input.js";
+import Grid from "@material-ui/core/Grid";
 import Date_Picker from "../../component/dateTimePicker/DatePicker.js";
-import {
-  userProfile,
-  SaveUserProfile
-} from "../../action/userProfileActions.js";
+import { SaveUserProfile } from "../../action/userProfileActions.js";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import dateformat from "dateformat";
-class ProfileDialogModel extends Component {
-  state = {
-    // open: true,
-    email: "",
-    username: "",
-    phonenumber: "",
-    user_id: "",
-    dateofbirth: new Date()
-    // selectDate: new Date()
-  };
-  componentDidMount() {
-    this.props.userProfile();
+import Avatar from "@material-ui/core/Avatar";
+import IconButton from "@material-ui/core/IconButton";
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = theme => ({
+  input: {
+    display: "none"
   }
+});
+class ProfileDialogModel extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      // open: true,
+      user_id: this.props.userProfile._id,
+      email: this.props.userProfile.email,
+      username: this.props.userProfile.name,
+      image: this.props.userProfile.image,
+      phonenumber: this.props.userProfile.phonenumber || ""
+      // selectDate: new Date()
+    };
+  }
+
   handleClickOpen = () => {
     this.setState({ open: true });
   };
@@ -43,6 +51,24 @@ class ProfileDialogModel extends Component {
     });
   };
 
+  handleOnChangeImage = file => {
+    console.log(file.target.files[0]);
+    if (!file.target.files[0]) {
+      return false;
+    } else {
+      const reader = new FileReader();
+      const url = reader.readAsDataURL(file.target.files[0]);
+      // Call Back Function Execute after read file data
+      reader.onloadend = e => {
+        console.log(reader.result);
+        this.setState({
+          ...this.state,
+          image: reader.result
+        });
+        // setImage({ ...state, ...date, image: reader.result });
+      };
+    }
+  };
   saveProfileData = e => {
     e.preventDefault();
     const data = {
@@ -50,19 +76,24 @@ class ProfileDialogModel extends Component {
       username: this.state.username,
       email: this.state.email,
       phonenumber: this.state.phonenumber,
+      image: this.state.image,
       dateofbirth: dateformat(this.state.dateofbirth, "isoDate", true)
     };
     this.props.SaveUserProfile(data);
     console.log(data);
   };
   componentDidUpdate(prevProps, prevState) {
-    console.log(this.props.userDetail.email);
-    if (prevState.email == null || prevState.email == "") {
+    console.log(this.props.userProfile);
+    if (
+      prevProps.userProfile !== this.props.userProfile &&
+      this.props.userProfile == ""
+    ) {
       this.setState({
-        user_id: this.props.userDetail._id,
-        email: this.props.userDetail.email,
-        username: this.props.userDetail.name,
-        phonenumber: this.props.userDetail.phonenumber || ""
+        user_id: this.props.userProfile._id,
+        email: this.props.userProfile.email,
+        username: this.props.userProfile.name,
+        image: this.props.userProfile.image,
+        phonenumber: this.props.userProfile.phonenumber || ""
       });
     }
   }
@@ -71,7 +102,8 @@ class ProfileDialogModel extends Component {
     if (!this.props.open) {
       return null;
     }
-    console.log(this.props.userDetail);
+    console.log(this.props.userProfile);
+    const { classes, theme } = this.props;
 
     return (
       <React.Fragment>
@@ -83,6 +115,38 @@ class ProfileDialogModel extends Component {
           <DialogTitle id="form-dialog-title">Profile</DialogTitle>
           <form onSubmit={this.saveProfileData}>
             <DialogContent>
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+              >
+                <input
+                  accept="image/*"
+                  className={classes.input}
+                  id="icon-button-file"
+                  type="file"
+                  name="image"
+                  onChange={this.handleOnChangeImage}
+                />
+                <label htmlFor="icon-button-file">
+                  <IconButton
+                    color="primary"
+                    className={classes.button}
+                    aria-label="Upload picture"
+                    component="span"
+                  >
+                    <Avatar
+                      className={classes.avatar}
+                      src={
+                        this.state.image
+                          ? this.state.image
+                          : "/Images/images.jpeg"
+                      }
+                    />
+                  </IconButton>
+                </label>
+              </Grid>
               <Input
                 autoFocus
                 name={"email"}
@@ -133,12 +197,13 @@ ProfileDialogModel.propTypes = {
 };
 const mapStateToProps = state => {
   return {
-    userDetail: state.userProfileReducer.userProfile
+    userProfile: state.userProfileReducer.userProfile
   };
 };
+const dialogModel = withStyles(styles)(ProfileDialogModel);
 export default connect(
   mapStateToProps,
-  { userProfile, SaveUserProfile }
-)(ProfileDialogModel);
+  { SaveUserProfile }
+)(dialogModel);
 
 // <Button onClick={this.handleClickOpen}>Profile</Button>

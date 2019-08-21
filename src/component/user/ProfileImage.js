@@ -15,7 +15,7 @@ function ProfileImage(props) {
     <div>
       <Avatar
         alt="Remy Sharp"
-        src="/Images/images.jpeg"
+        src={"/Images/images.jpeg"}
         className={classes.avatar}
       />
     </div>

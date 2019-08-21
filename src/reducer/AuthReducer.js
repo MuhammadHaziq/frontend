@@ -19,6 +19,7 @@ import {
 const Initial_State = {
   auth: false,
   currentuser: {},
+  userProfile:{},
   loader: false,
   message: null,
   open: false

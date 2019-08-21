@@ -7,15 +7,17 @@ import { Provider } from "react-redux";
 import Routes from "./route/Routes.js";
 import SetAuthorizeToken from "./utils/SetAuthorizeToken.js";
 import { setCurrentUser } from "./action/authActions.js";
+import { userProfile } from "./action/userProfileActions.js";
 import jwt from "jsonwebtoken";
 
 if (localStorage.jwttoken) {
   SetAuthorizeToken(localStorage.jwttoken);
   Store.dispatch(setCurrentUser(jwt.decode(localStorage.jwttoken)));
+  Store.dispatch(userProfile(localStorage.jwttoken));
 }
 ReactDOM.render(
   <Provider store={Store}>
-      <Routes />
+    <Routes />
   </Provider>,
   document.getElementById("root")
 );

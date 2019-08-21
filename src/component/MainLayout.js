@@ -103,10 +103,14 @@ class MainLayout extends Component {
   handleDrawerClose = () => {
     this.setState({ open: false });
   };
-
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.props.auth !== prevProps.auth && this.props.auth !== true) {
+  //       this.props.userProfile();
+  //   }
+  // }
   render() {
     const { classes, theme } = this.props;
-    // console.log(this.props.auth);
+    console.log(this.props);
     // console.log(this.props.location);
     return this.props.auth === true ? (
       <BrowserRouter>
@@ -135,7 +139,7 @@ class MainLayout extends Component {
                 justify="flex-end"
                 alignItems="center"
               >
-                <ProfileName username="Muhammad Haziq" />
+                <ProfileName username={"Muhammad Haziq"} />
                 <ProfileImage />
                 <ProfileMenu />
               </Grid>
@@ -229,7 +233,8 @@ MainLayout.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    auth: state.AuthReducer.auth
+    auth: state.AuthReducer.auth,
+    userDetail: state.userProfileReducer.userProfile
   };
 };
 const style = withStyles(styles, { withTheme: true })(MainLayout);

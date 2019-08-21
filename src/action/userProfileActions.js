@@ -8,9 +8,10 @@ import axios from "axios";
 import jwt from "jsonwebtoken";
 //  User Profilr
 
-export const userProfile = () => {
+export const userProfile = token => {
   return dispatch => {
-    const token = localStorage.jwttoken;
+    console.log(token);
+    // const token = localStorage.jwttoken;
     // console.log(axios.defaults.headers.common["Authorize"]);
     const options = {
       url: "/profile",
@@ -40,6 +41,10 @@ export const SaveUserProfile = data => {
     };
     axios(options)
       .then(response => {
+        dispatch({
+          type: USER_PROFILE_DATA,
+          response: response.data.data
+        });
         console.log(response);
       })
       .catch(err => {

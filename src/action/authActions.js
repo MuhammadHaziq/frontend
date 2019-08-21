@@ -2,6 +2,7 @@ import {
   SERVER_ERROR,
   USER_LOGIN_START,
   USER_LOGIN_SUCCESS,
+  USER_PROFILE_DATA,
   USER_LOGIN_FAIL,
   SNACKBAR_CLOSE,
   SIGNUP_START,
@@ -20,12 +21,20 @@ import jwt from "jsonwebtoken";
 import SetAuthorizeToken from "../utils/SetAuthorizeToken.js";
 
 export const setCurrentUser = token => {
+  console.log(token);
   return {
     type: USER_LOGIN_SUCCESS,
     response: token
   };
 };
 
+export const setUserProfile = userData => {
+  console.log(userData);
+  return {
+    type: USER_PROFILE_DATA,
+    response: userData
+  };
+};
 export const UserLogin = (data, location) => {
   return dispatch => {
     dispatch({
@@ -37,13 +46,22 @@ export const UserLogin = (data, location) => {
         if (response.data.success === true) {
           const token = response.data.token;
           const user = jwt.decode(token);
-          dispatch(setCurrentUser(user));
+          console.log(response.data.userDetail);
+          const userData = response.data.userDetail;
+          dispatch({
+            type: USER_PROFILE_DATA,
+            response: userData
+          });
+          // dispatch(setUserProfile(userData));
+          dispatch(setCurrentUser(token));
+          // console.log(userProfile);
           // dispatch({
           //   type: USER_LOGIN_SUCCESS,
           //   response: response.data
           // });
           localStorage.setItem("jwttoken", token);
           SetAuthorizeToken(token);
+
           location.push("/home");
         } else {
           dispatch({ type: USER_LOGIN_FAIL, response: response.data.message });
