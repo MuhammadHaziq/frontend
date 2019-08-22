@@ -139,8 +139,8 @@ class MainLayout extends Component {
                 justify="flex-end"
                 alignItems="center"
               >
-                <ProfileName username={"Muhammad Haziq"} />
-                <ProfileImage />
+                <ProfileName username={this.props.userDetail.name} />
+                <ProfileImage {...this.props} />
                 <ProfileMenu />
               </Grid>
             </Toolbar>

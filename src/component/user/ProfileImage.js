@@ -15,7 +15,7 @@ function ProfileImage(props) {
     <div>
       <Avatar
         alt="Remy Sharp"
-        src={"/Images/images.jpeg"}
+        src={props.userDetail.image !== ''? props.userDetail.image : "/Images/images.jpeg"}
         className={classes.avatar}
       />
     </div>
